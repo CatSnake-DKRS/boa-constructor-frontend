@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+//dropdown for history elements
 function SearchedResults(props) {
+  //searched is an array of objects returned from the DB, each object contains past search query info
   const { searched, handleElementClick } = props;
-  console.log('line 5', searched);
   return (
+    //renders history objects in state to components with two primary html subcomponents:
+    //the javascript code sent by user and the english translation send back by API
     <div className='searchedContainer'>
       {searched.map((obj) => (
         <div
@@ -17,7 +20,7 @@ function SearchedResults(props) {
             ...
           </p>
           <p>
-            <span>Translation: </span>
+            <span>Plain English: </span>
             {obj.code.slice(0, 100)}
             ...
           </p>

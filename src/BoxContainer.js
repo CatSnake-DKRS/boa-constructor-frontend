@@ -81,6 +81,7 @@ function BoxContainer() {
   function handleElementClick(obj) {
     setShrinkComponent({ shrink: 'true' });
     document.querySelector('#filled-multiline-static').value = obj.code;
+    //REMINDER: DOUBLECHECK THIS. To test you can click on an element in the history dropdown
     setOutputText(obj.translation);
   }
 

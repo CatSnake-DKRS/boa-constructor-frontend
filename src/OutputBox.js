@@ -9,7 +9,6 @@ const inlineStyle = {
 };
 
 export default function (props) {
-  console.log(props.outputText);
   return (
     <div id='Output' className='boxes' style={inlineStyle}>
       <TextField
