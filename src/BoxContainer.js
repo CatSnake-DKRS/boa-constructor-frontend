@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Button } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
 import Shark from './static/shark.png';
-import { Button } from '@mui/material';
 import SignInButtons from './SignInButtons';
 
 // mock data for searched:
@@ -73,12 +73,18 @@ function BoxContainer() {
 
   // function to invoke when user clicks one previously searched query
   // we expect to see full code and translation in the input / output boxes
+
+  // function utilizes hooks to shrink the label component within the user input text field
+  // label within text field does not shrink when text is inputted programattically
+  // rather than manually typed
+  // use this method anywhere you are programatically copying and pasting into the user input field
   function handleElementClick(obj) {
     setShrinkComponent({ shrink: 'true' });
     document.querySelector('#filled-multiline-static').value = obj.code;
     setOutputText(obj.translation);
   }
 
+  // adds whatever is in user input text field into state
   const handleTyping = (event) => {
     setInputText(event.target.value);
   };
@@ -174,7 +180,7 @@ function BoxContainer() {
           inputTextLength={inputTextLength}
         />
         <div id='imgWrapper'>
-          <img id='shark' src={Shark}></img>
+          <img id='shark' src={Shark} />
         </div>
         <OutputBox
           outputText={outputText}
