@@ -13,7 +13,7 @@ const inlineStyle = {
 
 export default function (props) {
   const { inputTextLength, handleSubmit, handleTyping } = props;
-  console.log(handleSubmit);
+  //Variable to display remaining characters allowed in input field (max is set to 250)
   const characterCount = `${inputTextLength} / 250`;
   return (
     <div className='boxes' id='Input' style={inlineStyle}>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { TextField, Button, Grid, ButtonGroup } from '@mui/material';
+import { TextField, Button, ButtonGroup } from '@mui/material';
 
+// REMINDER: move to CSS stylesheet
 const inlineStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -8,7 +9,6 @@ const inlineStyle = {
 };
 
 export default function (props) {
-  console.log(props.outputText);
   return (
     <div id='Output' className='boxes' style={inlineStyle}>
       <TextField
