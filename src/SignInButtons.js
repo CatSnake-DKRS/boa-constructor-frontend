@@ -96,6 +96,7 @@ function SignInButtons(props) {
     // setLoginStatus(false);
   };
 
+  // if user is logged in, then render logout button
   if (stateUsername !== '') {
     return (
       <div id='SignInButtons'>
@@ -110,6 +111,7 @@ function SignInButtons(props) {
       </div>
     );
   }
+  // if user is not logged, then render sign up and login buttons
   return (
     <div id='SignInButtons'>
       <Button

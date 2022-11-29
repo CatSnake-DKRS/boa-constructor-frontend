@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextField, Button, ButtonGroup } from '@mui/material';
 
+// REMINDER: move to CSS stylesheet
 const inlineStyle = {
   display: 'flex',
   flexDirection: 'column',
