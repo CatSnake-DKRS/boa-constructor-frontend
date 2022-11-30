@@ -18,14 +18,23 @@ export default function (props) {
   } = props;
   // Variable to display remaining characters allowed in input field (max is set to 250)
   const characterCount = `${inputTextLength} / 250`;
-  let schemaBox = [];
+  let schemaButton = [];
   if (queryMode === 'en-to-sql') {
-    schemaBox = <SchemaBox />;
-    console.log(schemaBox);
+    schemaButton = (
+      <Button
+        style={{ paddingTop: '10px', margin: 2 }}
+        fullWidth
+        size='large'
+        sx={{ width: 'auto' }}
+        variant='outlined'
+      >
+        Add Schema
+      </Button>
+    );
+    console.log(schemaButton);
   }
   return (
     <div className='boxes' id='Input' style={inlineStyle}>
-      {schemaBox}
       <TextField
         InputLabelProps={shrinkComponent}
         inputProps={{ maxLength: 250 }}
@@ -43,18 +52,21 @@ export default function (props) {
         }}
         helperText={characterCount}
       />
-      <Button
-        style={{ paddingTop: '10px' }}
-        fullWidth
-        startIcon={<KeyboardDoubleArrowRightIcon />}
-        endIcon={<KeyboardDoubleArrowLeftIcon />}
-        variant='contained'
-        size='large'
-        onClick={(event) => handleSubmit(event)}
-        sx={{ width: 'auto' }}
-      >
-        Translate
-      </Button>
+      <div id='inputButtonContainer'>
+        {schemaButton}
+        <Button
+          style={{ paddingTop: '10px', margin: 2 }}
+          fullWidth
+          startIcon={<KeyboardDoubleArrowRightIcon />}
+          endIcon={<KeyboardDoubleArrowLeftIcon />}
+          variant='contained'
+          size='large'
+          onClick={(event) => handleSubmit(event)}
+          sx={{ width: 'auto' }}
+        >
+          Translate
+        </Button>
+      </div>
     </div>
   );
 }

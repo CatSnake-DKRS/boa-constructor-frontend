@@ -38,7 +38,7 @@ const mockDataForSearch = [
 function BoxContainer() {
   const [inputText, setInputText] = useState('');
   const [inputTextLength, setInputTextLength] = useState(0);
-  const [inputLanguage, setInputLanguage] = useState('Javascript');
+  const [inputLanguage] = useState('Javascript');
   const [outputText, setOutputText] = useState('');
   const [username, setUsername] = useState('Robbie');
   const [open, setHistoryOpen] = useState(false);
@@ -48,6 +48,7 @@ function BoxContainer() {
   const [queryMode, setQueryMode] = useState('code-to-en');
   const [outputLabel, setOutputLabel] = useState('Plain English');
   const [expButtonText, setExpButtonText] = useState('COPY EXPLANATION');
+  const [inputBoxPlaceholder, setInputBoxPlaceholder] = useState('');
 
   useEffect(() => {
     setInputTextLength(inputText.toString().length);
@@ -142,9 +143,12 @@ function BoxContainer() {
 
     // request body to be sent to backend
     const json = {
-      text: inputText,
-      language: 'JavaScript',
+      query: inputText,
     };
+
+    // if (schema !== '') {
+    //   json.schema = schema;
+    // }
 
     // sending username if user is logged in
     if (username.length > 0) {
