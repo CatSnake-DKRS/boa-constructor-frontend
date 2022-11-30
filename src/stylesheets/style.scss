@@ -18,6 +18,18 @@ img {
   position: relative;
 }
 
+#button-group-container {
+  display: flex;
+  justify-content: space-around;
+}
+#ButtonGroup {
+  text-align: center;
+}
+
+#inputButtonContainer {
+  display: flex;
+}
+
 #BoxContainer {
   display: flex;
   flex-direction: row;
