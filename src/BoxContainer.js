@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, TextField } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
 import Shark from './static/shark.png';
 import SignInButtons from './SignInButtons';
+import SchemaBox from './schemaBox';
 
 // mock data for searched:
 // to test first update username in the state to any mock string as well
@@ -159,9 +160,9 @@ function BoxContainer() {
       query: inputText,
     };
 
-    // if (schema !== '') {
-    //   json.schema = schema;
-    // }
+    if (userSchema) {
+      json.schema = userSchema;
+    }
 
     // sending username if user is logged in
     if (username.length > 0) {
@@ -216,6 +217,21 @@ function BoxContainer() {
     }
   }, [queryMode]);
 
+  // handles updating of user schema on submission of schema box
+  const handleSchemaSubmit = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+    const tableName = data.get('table-name');
+    const columnNames = data.get('column-names');
+    const schemaObj = {};
+    schemaObj[tableName] = columnNames;
+
+    setUserSchema(schemaObj);
+  };
+
+  // renders schema information when current mode is en-to-sql and schema is present in state
+
   return (
     <>
       <div id='headerButtons'>
@@ -258,6 +274,7 @@ function BoxContainer() {
         </ButtonGroup>
       </div>
       <main id='BoxContainer' style={{ display: 'flex' }}>
+        <SchemaBox userSchema={userSchema} queryMode={queryMode} />
         <UserInput
           inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
@@ -266,6 +283,7 @@ function BoxContainer() {
           handleSubmit={handleSubmit}
           queryMode={queryMode}
           inputTextLength={inputTextLength}
+          handleSchemaSubmit={handleSchemaSubmit}
         />
         <div id='imgWrapper'>
           <img id='shark' src={Shark} />
