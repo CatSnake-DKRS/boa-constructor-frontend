@@ -1,5 +1,4 @@
 import React from 'react';
-import { TextField } from '@mui/material';
 import {
   Button,
   TextField,
@@ -7,16 +6,17 @@ import {
   DialogContent,
   DialogTitle,
   Box,
-}
+} from '@mui/material';
 
-function SchemaDialogue() {
+function SchemaDialogue(props) {
+  const { openSchemaBox, handleSchemaBoxClose, handleSchemaSubmit } = props;
   return (
-    <Dialog open={openLogin} onClose={handleLoginClose}>
-      <DialogTitle>Login</DialogTitle>
+    <Dialog open={openSchemaBox} onClose={handleSchemaBoxClose}>
+      <DialogTitle>Enter Your Database Schema</DialogTitle>
       <DialogContent>
         <Box
           component='form'
-          onSubmit={handleLoginSubmit}
+          onSubmit={handleSchemaSubmit}
           noValidate
           sx={{ mt: 1 }}
         >
@@ -24,20 +24,18 @@ function SchemaDialogue() {
             margin='normal'
             required
             fullWidth
-            id='username'
-            label='Username'
-            name='username'
+            id='table-name'
+            label='Table Name'
+            name='table-name'
             autoComplete='off'
-            autoFocus
           />
           <TextField
-            type='password'
             margin='normal'
             required
             fullWidth
-            id='password'
-            label='Password'
-            name='password'
+            id='column-names'
+            label='Column Names (Separated By Commas)'
+            name='column-names'
             autoComplete='off'
           />
           <Button
@@ -47,7 +45,7 @@ function SchemaDialogue() {
             sx={{ mt: 3, mb: 2 }}
             color='secondary'
           >
-            Sign In
+            Submit Schema
           </Button>
         </Box>
       </DialogContent>

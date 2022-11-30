@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, TextField } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
 import Shark from './static/shark.png';
 import SignInButtons from './SignInButtons';
+import SchemaBox from './schemaBox';
 
 // mock data for searched:
 // to test first update username in the state to any mock string as well
@@ -36,19 +37,32 @@ const mockDataForSearch = [
 ];
 
 function BoxContainer() {
+  // updates current text in user input box
   const [inputText, setInputText] = useState('');
+  // updates length of current input text
   const [inputTextLength, setInputTextLength] = useState(0);
-  const [inputLanguage] = useState('Javascript');
+  // displays text returned from server
   const [outputText, setOutputText] = useState('');
+  // keeps track of the current username in the session
   const [username, setUsername] = useState('Robbie');
+  // sets history menu to open or close
   const [open, setHistoryOpen] = useState(false);
+  // fixes mui text field bug when label doesn't shrink after text is copied into input
   const [shrinkComponent, setShrinkComponent] = useState({});
+  // keeps track of search history
   const [searched, setSearched] = useState(mockDataForSearch);
+  // text displayed in input box
   const [inputLabel, setInputLabel] = useState('Paste your code');
+  // keeps track of currently selected query method
   const [queryMode, setQueryMode] = useState('code-to-en');
+  // text displayed in output box
   const [outputLabel, setOutputLabel] = useState('Plain English');
+  // changes text in copy button
   const [expButtonText, setExpButtonText] = useState('COPY EXPLANATION');
+  // changes text of input box placeholder
   const [inputBoxPlaceholder, setInputBoxPlaceholder] = useState('');
+  // keeps track of user inputted schema
+  const [userSchema, setUserSchema] = useState('');
 
   useEffect(() => {
     setInputTextLength(inputText.toString().length);
@@ -146,9 +160,9 @@ function BoxContainer() {
       query: inputText,
     };
 
-    // if (schema !== '') {
-    //   json.schema = schema;
-    // }
+    if (userSchema) {
+      json.schema = userSchema;
+    }
 
     // sending username if user is logged in
     if (username.length > 0) {
@@ -203,6 +217,21 @@ function BoxContainer() {
     }
   }, [queryMode]);
 
+  // handles updating of user schema on submission of schema box
+  const handleSchemaSubmit = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+    const tableName = data.get('table-name');
+    const columnNames = data.get('column-names');
+    const schemaObj = {};
+    schemaObj[tableName] = columnNames;
+
+    setUserSchema(schemaObj);
+  };
+
+  // renders schema information when current mode is en-to-sql and schema is present in state
+
   return (
     <>
       <div id='headerButtons'>
@@ -245,15 +274,16 @@ function BoxContainer() {
         </ButtonGroup>
       </div>
       <main id='BoxContainer' style={{ display: 'flex' }}>
+        <SchemaBox userSchema={userSchema} queryMode={queryMode} />
         <UserInput
           inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
-          inputlanguage={inputLanguage}
           inputText={inputText}
           handleTyping={handleTyping}
           handleSubmit={handleSubmit}
           queryMode={queryMode}
           inputTextLength={inputTextLength}
+          handleSchemaSubmit={handleSchemaSubmit}
         />
         <div id='imgWrapper'>
           <img id='shark' src={Shark} />
