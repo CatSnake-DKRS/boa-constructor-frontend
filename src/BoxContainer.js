@@ -36,19 +36,32 @@ const mockDataForSearch = [
 ];
 
 function BoxContainer() {
+  // updates current text in user input box
   const [inputText, setInputText] = useState('');
+  // updates length of current input text
   const [inputTextLength, setInputTextLength] = useState(0);
-  const [inputLanguage] = useState('Javascript');
+  // displays text returned from server
   const [outputText, setOutputText] = useState('');
+  // keeps track of the current username in the session
   const [username, setUsername] = useState('Robbie');
+  // sets history menu to open or close
   const [open, setHistoryOpen] = useState(false);
+  // fixes mui text field bug when label doesn't shrink after text is copied into input
   const [shrinkComponent, setShrinkComponent] = useState({});
+  // keeps track of search history
   const [searched, setSearched] = useState(mockDataForSearch);
+  // text displayed in input box
   const [inputLabel, setInputLabel] = useState('Paste your code');
+  // keeps track of currently selected query method
   const [queryMode, setQueryMode] = useState('code-to-en');
+  // text displayed in output box
   const [outputLabel, setOutputLabel] = useState('Plain English');
+  // changes text in copy button
   const [expButtonText, setExpButtonText] = useState('COPY EXPLANATION');
+  // changes text of input box placeholder
   const [inputBoxPlaceholder, setInputBoxPlaceholder] = useState('');
+  // keeps track of user inputted schema
+  const [userSchema, setUserSchema] = useState('');
 
   useEffect(() => {
     setInputTextLength(inputText.toString().length);
@@ -248,7 +261,6 @@ function BoxContainer() {
         <UserInput
           inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
-          inputlanguage={inputLanguage}
           inputText={inputText}
           handleTyping={handleTyping}
           handleSubmit={handleSubmit}

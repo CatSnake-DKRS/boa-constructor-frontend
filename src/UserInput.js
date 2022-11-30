@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import SchemaBox from './SchemaBox';
+import SchemaDialogue from './SchemaDialogue';
 import Shark from './static/shark.png';
 
 const inlineStyle = {
@@ -13,23 +13,47 @@ const inlineStyle = {
 };
 
 export default function (props) {
+  const [openSchemaBox, setOpenSchemabox] = useState(false);
+
+  const handleSchemaBoxOpen = () => {
+    setOpenSchemabox(true);
+  };
+
+  const handleSchemaBoxClose = () => {
+    setOpenSchemabox(false);
+  };
+
   const {
-    inputTextLength, handleSubmit, handleTyping, inputLabel, shrinkComponent, queryMode,
+    inputTextLength,
+    handleSubmit,
+    handleTyping,
+    inputLabel,
+    shrinkComponent,
+    queryMode,
+    handleSchemaSubmit,
   } = props;
   // Variable to display remaining characters allowed in input field (max is set to 250)
   const characterCount = `${inputTextLength} / 250`;
   let schemaButton = [];
   if (queryMode === 'en-to-sql') {
     schemaButton = (
-      <Button
-        style={{ paddingTop: '10px', margin: 2 }}
-        fullWidth
-        size='large'
-        sx={{ width: 'auto' }}
-        variant='outlined'
-      >
-        Add Schema
-      </Button>
+      <>
+        <Button
+          onClick={handleSchemaBoxOpen}
+          style={{ paddingTop: '10px', margin: 2 }}
+          fullWidth
+          size='large'
+          sx={{ width: 'auto' }}
+          variant='outlined'
+        >
+          Add Schema
+        </Button>
+        <SchemaDialogue
+          openSchemaBox={openSchemaBox}
+          handleSchemaBoxClose={handleSchemaBoxClose}
+          handleSchemaSubmit={handleSchemaSubmit}
+        />
+      </>
     );
     console.log(schemaButton);
   }
