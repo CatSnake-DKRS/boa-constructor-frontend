@@ -9,16 +9,36 @@ const inlineStyle = {
 };
 
 export default function (props) {
+  const {
+    outputText, copySudo, copyNormal, outputLabel, queryMode, expButtonText,
+  } = props;
+
+  let sudoCodeButton;
+  if (queryMode === 'code-to-en') {
+    sudoCodeButton = (
+      <Button
+        style={{ paddingTop: '10px', margin: 2 }}
+        variant='contained'
+        size='large'
+        onClick={() => copySudo()}
+      >
+        Copy As Sudo Code
+      </Button>
+    );
+  } else {
+    sudoCodeButton = [];
+  }
+
   return (
     <div id='Output' className='boxes' style={inlineStyle}>
       <TextField
         multiline
         rows={20}
-        placeholder='Plain English'
+        placeholder={outputLabel}
         variant='filled'
         fullWidth
         readOnly
-        value={props.outputText}
+        value={outputText}
         helperText='Copy text to clipboard'
       />
       <ButtonGroup
@@ -28,21 +48,14 @@ export default function (props) {
           justifyContent: 'center',
         }}
       >
+        {sudoCodeButton}
         <Button
           style={{ paddingTop: '10px', margin: 2 }}
           variant='contained'
           size='large'
-          onClick={() => props.copySudo()}
+          onClick={() => copyNormal()}
         >
-          Copy As Sudo Code
-        </Button>
-        <Button
-          style={{ paddingTop: '10px', margin: 2 }}
-          variant='contained'
-          size='large'
-          onClick={() => props.copyNormal()}
-        >
-          Copy Explanation
+          {expButtonText}
         </Button>
       </ButtonGroup>
     </div>

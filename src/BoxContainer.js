@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
@@ -44,32 +44,30 @@ function BoxContainer() {
   const [open, setHistoryOpen] = useState(false);
   const [shrinkComponent, setShrinkComponent] = useState({});
   const [searched, setSearched] = useState(mockDataForSearch);
+  const [inputLabel, setInputLabel] = useState('Paste your code');
+  const [queryMode, setQueryMode] = useState('code-to-en');
+  const [outputLabel, setOutputLabel] = useState('Plain English');
+  const [expButtonText, setExpButtonText] = useState('COPY EXPLANATION');
 
   useEffect(() => {
     setInputTextLength(inputText.toString().length);
   });
 
-  // // functionality to get previously researched queries from the database
-  // useEffect(() => {
-  //   if (username) {
-  //     const requestURI = process.env.BACKEND_API_URI + '/user/getRequests';
-  //     const getSearched = async () => {
-  //       const response = await fetch(requestURI, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Access-Control-Allow-Origin': '*', // might not need this
-  //         },
-  //         body: JSON.stringify({
-  //           username: username,
-  //         }),
-  //       });
-  //       return response.data;
-  //     };
-  //     const data = getSearched();
-  //     setSearched(data);
-  //   }
-  // }, [username]);
+  // functionality to get previously researched queries from the database
+  useEffect(() => {
+    if (username.length !== 0) {
+      console.log('useEffect hook: ', username);
+      const requestURI = `${process.env.BACKEND_USER_URI}/getRequests`;
+      const getRequests = async () => {
+        const response = await axios.post(requestURI, {
+          username,
+        });
+        console.log(response.data);
+        setSearched(response.data);
+      };
+      getRequests();
+    }
+  }, [username]);
 
   // function to invoke when user clicks one previously searched query
   // we expect to see full code and translation in the input / output boxes
@@ -81,7 +79,7 @@ function BoxContainer() {
   function handleElementClick(obj) {
     setShrinkComponent({ shrink: 'true' });
     document.querySelector('#filled-multiline-static').value = obj.code;
-    //REMINDER: DOUBLECHECK THIS. To test you can click on an element in the history dropdown
+    // REMINDER: DOUBLECHECK THIS. To test you can click on an element in the history dropdown
     setOutputText(obj.translation);
   }
 
@@ -137,7 +135,10 @@ function BoxContainer() {
   const handleSubmit = async (event) => {
     // console.log(JSON.stringify(inputText));
     event.preventDefault();
-    const requestURI = process.env.BACKEND_API_URI;
+    let requestURI;
+    if (queryMode === 'code-to-en') requestURI = `${process.env.BACKEND_API_URI}/entocode`;
+    if (queryMode === 'en-to-code') requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
+    if (queryMode === 'en-to-sql') requestURI = `${process.env.BACKEND_API_URI}/entosql`;
 
     // request body to be sent to backend
     const json = {
@@ -166,10 +167,45 @@ function BoxContainer() {
     setHistoryOpen(!open);
   };
 
+  // handling query mode changes -> setting mode
+  const handleCodeToEnClick = () => {
+    setQueryMode('code-to-en');
+  };
+  const handleEnToCodeClick = () => {
+    setQueryMode('en-to-code');
+  };
+  const handleEnToSQLClick = () => {
+    setQueryMode('en-to-sql');
+  };
+  // handling updating of variables depending on query mode
+  let schemaBox;
+  useEffect(() => {
+    if (queryMode === 'code-to-en') {
+      setInputLabel('Paste your code');
+      setOutputLabel('Plain English');
+      setExpButtonText('COPY EXPLANATION');
+      schemaBox = [];
+    }
+    if (queryMode === 'en-to-code') {
+      setInputLabel('Type your plain english to be translated');
+      setOutputLabel('Generated Code');
+      setExpButtonText('COPY CODE');
+      schemaBox = [];
+    }
+    if (queryMode === 'en-to-sql') {
+      setInputLabel('Type what you want your query to search for');
+      setOutputLabel('Generated SQL Query');
+      setExpButtonText('COPY SQL QUERY');
+    }
+  }, [queryMode]);
+
   return (
     <>
       <div id='headerButtons'>
         <SignInButtons setUsername={setUsername} stateUsername={username} />
+        <div id='header'>
+          <h1>Boa Constructor</h1>
+        </div>
         {username && (
           <div className='dropdown'>
             <Button onClick={handleHistoryOpen}>Your History</Button>
@@ -182,20 +218,47 @@ function BoxContainer() {
           </div>
         )}
       </div>
+      <div id='button-group-container'>
+        <ButtonGroup variant='outlined' aria-label='outlined button group'>
+          <Button
+            onClick={handleCodeToEnClick}
+            variant={(queryMode === 'code-to-en') ? 'contained' : 'outlined'}
+          >
+            Code to English
+          </Button>
+          <Button
+            onClick={handleEnToCodeClick}
+            variant={(queryMode === 'en-to-code') ? 'contained' : 'outlined'}
+          >
+            English to Code
+          </Button>
+          <Button
+            onClick={handleEnToSQLClick}
+            variant={(queryMode === 'en-to-sql') ? 'contained' : 'outlined'}
+          >
+            English to SQL
+          </Button>
+        </ButtonGroup>
+      </div>
       <main id='BoxContainer' style={{ display: 'flex' }}>
         <UserInput
+          inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
           inputlanguage={inputLanguage}
           inputText={inputText}
           handleTyping={handleTyping}
           handleSubmit={handleSubmit}
+          queryMode={queryMode}
           inputTextLength={inputTextLength}
         />
         <div id='imgWrapper'>
           <img id='shark' src={Shark} />
         </div>
         <OutputBox
+          outputLabel={outputLabel}
           outputText={outputText}
+          queryMode={queryMode}
+          expButtonText={expButtonText}
           copyNormal={CopyToClipBoardNormal}
           copySudo={CopyToClipBoardSudo}
         />

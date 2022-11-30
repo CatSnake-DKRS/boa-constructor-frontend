@@ -188,7 +188,6 @@ function SignInButtons(props) {
             />
             <TextField
               margin='normal'
-              required
               fullWidth
               id='email'
               label='Email (optional)'
