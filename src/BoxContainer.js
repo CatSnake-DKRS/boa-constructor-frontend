@@ -71,7 +71,7 @@ function BoxContainer() {
         });
         //if there are previous searches in the databases, set search in state to the
         //array of previous searches that are returned from the backend
-        if (response.data.length > 0) setSearched(response.data);
+        if (response.data.length > 0) setSearched(response.data.reverse());
       };
       getRequests();
     }
@@ -246,7 +246,7 @@ function BoxContainer() {
             {open ? (
               <SearchedResults
                 handleElementClick={handleElementClick}
-                searched={searched}
+                searched={searched.slice(0, 5)}
               />
             ) : null}
           </div>
