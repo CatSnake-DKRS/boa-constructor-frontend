@@ -10,7 +10,12 @@ const inlineStyle = {
 
 export default function (props) {
   const {
-    outputText, copySudo, copyNormal, outputLabel, queryMode, expButtonText,
+    outputText,
+    copySudo,
+    copyNormal,
+    outputLabel,
+    queryMode,
+    expButtonText,
   } = props;
 
   let sudoCodeButton;

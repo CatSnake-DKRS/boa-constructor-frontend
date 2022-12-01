@@ -11,25 +11,35 @@ import axios from 'axios';
 
 function SignInButtons(props) {
   const { setUsername, stateUsername } = props;
-
+  //state to help manage what buttons show based on login conditions
   const [openLogin, setOpenLogin] = React.useState(false);
   const [openSignUp, setOpenSignUp] = React.useState(false);
-  const [isLoggedIn, setLoginStatus] = React.useState(false);
+
+  //state to help populate error fields when logins/signups are done incorrectly
+  const [errorSignUp, setErrorSignUp] = React.useState('');
+  const [errorLogin, setErrorLogin] = React.useState('');
+  const [errorPassword, setErrorPassword] = React.useState('');
 
   // opens and closes dialogue boxes for sign in and sign up functionality
   const handleClickLoginOpen = () => {
+    setErrorLogin('');
     setOpenLogin(true);
   };
 
   const handleClickSignUpOpen = () => {
+    setErrorSignUp('');
+    setErrorPassword('');
     setOpenSignUp(true);
   };
 
   const handleLoginClose = () => {
+    setErrorLogin('');
     setOpenLogin(false);
   };
 
   const handleSignUpClose = () => {
+    setErrorSignUp('');
+    setErrorPassword('');
     setOpenSignUp(false);
   };
 
@@ -41,17 +51,25 @@ function SignInButtons(props) {
     const username = data.get('username');
     const password = data.get('password');
     const login = async () => {
-      const response = await axios.post(requestURI, {
-        username,
-        password,
-      });
-      // if username or pw incorrect, display message saying so
-      console.log(response.data);
-      // change state of username with success
-      setUsername(response.data);
-      // close dialog
-      setOpenLogin(false);
-      // remove sign in and sign up bottons
+      try {
+        const response = await axios.post(requestURI, {
+          username,
+          password,
+        });
+
+        // if username or pw incorrect, display message saying so
+        // change state of username with success
+        setUsername(response.data);
+
+        //add username to session storage
+        sessionStorage.setItem('username', username);
+        // close dialog
+        setOpenLogin(false);
+        setErrorLogin('');
+        // remove sign in and sign up bottons
+      } catch (error) {
+        setErrorLogin('password or username were not valid');
+      }
     };
     login();
     console.log('submitted', username, password);
@@ -70,30 +88,40 @@ function SignInButtons(props) {
     const confirmPass = data.get('confirm-password');
     // check that pw and confirm pw match
     if (password !== confirmPass) {
-      console.log('passwords do not match');
+      setErrorPassword('passwords do not match');
       return;
     }
     // REMINDER: Implement username verification
     // check if username exists
     // if all pass, save new user
     const signUp = async () => {
-      const response = await axios.post(requestURI, {
-        username,
-        password,
-        email,
-      });
-      setUsername(response.data);
-      setOpenSignUp(false);
+      try {
+        const response = await axios.post(requestURI, {
+          username,
+          password,
+          email,
+        });
+        sessionStorage.setItem('username', username);
+        sessionStorage.setItem('email', email);
+        setUsername(response.data);
+        setOpenSignUp(false);
+      } catch (error) {
+        setErrorSignUp('password or username was not valid');
+      }
     };
     signUp();
-    console.log('signedup');
   };
 
   const handleLogout = (e) => {
     e.preventDefault();
     // change state of username to empty string
+    //clear any error messages that may be lingering
     setUsername('');
-    // setLoginStatus(false);
+    setErrorSignUp('');
+    setErrorLogin('');
+    setErrorPassword('');
+    //clear username from sessionId
+    sessionStorage.clear();
   };
 
   // if user is logged in, then render logout button
@@ -112,6 +140,7 @@ function SignInButtons(props) {
     );
   }
   // if user is not logged, then render sign up and login buttons
+
   return (
     <div id='SignInButtons'>
       <Button
@@ -132,6 +161,7 @@ function SignInButtons(props) {
             sx={{ mt: 1 }}
           >
             <TextField
+              helperText={errorLogin}
               margin='normal'
               required
               fullWidth
@@ -142,6 +172,7 @@ function SignInButtons(props) {
               autoFocus
             />
             <TextField
+              helperText={errorLogin}
               type='password'
               margin='normal'
               required
@@ -185,6 +216,7 @@ function SignInButtons(props) {
               name='username'
               autoComplete='off'
               autoFocus
+              helperText={errorSignUp}
             />
             <TextField
               margin='normal'
@@ -203,6 +235,7 @@ function SignInButtons(props) {
               label='Password'
               name='password'
               autoComplete='off'
+              helperText={errorSignUp}
             />
             <TextField
               type='password'
@@ -213,6 +246,7 @@ function SignInButtons(props) {
               label='Confirm Password'
               name='confirm-password'
               autoComplete='off'
+              helperText={errorPassword}
             />
             <Button
               type='submit'

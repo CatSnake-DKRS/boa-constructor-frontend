@@ -45,18 +45,20 @@ img {
 }
 
 .searchedContainer {
-  width: 180px;
+  width: 150px;
   justify-self: flex-start;
+  font-family: roboto;
   font-size: 12px;
-  background-color: rgb(8, 7, 20);
-  color: lime;
-  border-radius: 5px;
+  background-color: rgb(1, 60, 156);
+  color: rgb(255, 255, 255);
   position: absolute;
+  box-shadow: 10px 5px 5px red;
 }
 
 .element {
   margin-inline-end: 5%;
-  border-bottom: 1px solid lightgray;
+  margin-inline-start: 5%;
+  border-bottom: 1px solid rgb(130, 130, 130);
   word-wrap: break-word;
 }
 
