@@ -3,6 +3,18 @@ import userEvent from '@testing-library/user-event';
 import { render, screen, waitFor } from '@testing-library/react';
 import regeneratorRuntime from 'regenerator-runtime';
 
+import { Experimental_CssVarsProvider } from '@mui/material';
+import App from '../src/App';
+
+describe('renders correct text on main page', () => {
+  beforeAll(() => {
+    render(<App />);
+  });
+
+  test('Renders boa constructor text', () => {
+    expect(true.toEqual(true));
+  });
+});
 // mode buttons render different things and translate button sends to
 // different endpoint in each mode
 // after submission a response is generated in the output
