@@ -33,6 +33,7 @@ export default function (props) {
     setUserSchema,
     stringSchema,
     setStringSchema,
+    inputBoxPlaceholder,
   } = props;
   // Variable to display remaining characters allowed in input field (max is set to 250)
   const characterCount = `${inputTextLength} / 250`;
@@ -101,7 +102,7 @@ export default function (props) {
         rows={20}
         variant='filled'
         fullWidth
-        placeholder='Javascript'
+        placeholder={inputBoxPlaceholder}
         onChange={(event) => {
           handleTyping(event);
         }}

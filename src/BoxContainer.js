@@ -97,18 +97,22 @@ function BoxContainer() {
       setInputLabel('Paste your code');
       setOutputLabel('Plain English');
       setExpButtonText('COPY EXPLANATION');
+      setInputBoxPlaceholder('Code');
       schemaBox = [];
     }
     if (queryMode === 'en-to-code') {
       setInputLabel('Type your plain english to be translated');
       setOutputLabel('Generated Code');
       setExpButtonText('COPY CODE');
+      setInputBoxPlaceholder('Plain English Explanation');
+
       schemaBox = [];
     }
     if (queryMode === 'en-to-sql') {
       setInputLabel('Type what you want your query to search for');
       setOutputLabel('Generated SQL Query');
       setExpButtonText('COPY SQL QUERY');
+      setInputBoxPlaceholder('Plain English Explanation');
     }
   }, [queryMode]);
 
@@ -125,6 +129,13 @@ function BoxContainer() {
     // set input text + output text + schema in state to be equal to the history element
     setOutputText(historyel.translation);
     setUserSchema(historyel.schema);
+    const copySchema = { ...userSchema };
+    let string = '';
+    for (const [key, value] of Object.entries(copySchema)) {
+      string += key;
+      string += `(${value})` + '/n';
+    }
+    setStringSchema(string);
   }
 
   // adds whatever is in user input text field into state
@@ -274,8 +285,13 @@ function BoxContainer() {
         </ButtonGroup>
       </div>
       <main id='BoxContainer' style={{ display: 'flex' }}>
-        <SchemaBox userSchema={userSchema} queryMode={queryMode} stringSchema={stringSchema} />
+        <SchemaBox
+          userSchema={userSchema}
+          queryMode={queryMode}
+          stringSchema={stringSchema}
+        />
         <UserInput
+          inputBoxPlaceholder={inputBoxPlaceholder}
           inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
           inputText={inputText}
