@@ -6,7 +6,7 @@ import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
 import Snake from './static/snake.png';
 import SignInButtons from './SignInButtons';
-import SchemaBox from './schemaBox';
+import SchemaBox from './SchemaBox';
 
 function BoxContainer() {
   // updates current text in user input box
@@ -46,7 +46,10 @@ function BoxContainer() {
   // keeps track of user inputted schema
   const [userSchema, setUserSchema] = useState('');
 
-  //use effect hook checks if we have a username set in sessionStorage
+  // keeps track of string schema that was entered and will be displayed
+  const [stringSchema, setStringSchema] = useState('');
+
+  // use effect hook checks if we have a username set in sessionStorage
   useEffect(() => {
     const activeUsername = sessionStorage.getItem('username');
     if (activeUsername) {
@@ -54,7 +57,7 @@ function BoxContainer() {
     }
   }, [username]);
 
-  //use effect hook to display the length of the input text (cannot be over 250 characters)
+  // use effect hook to display the length of the input text (cannot be over 250 characters)
   useEffect(() => {
     setInputTextLength(inputText.toString().length);
   }, [inputTextLength]);
@@ -64,14 +67,14 @@ function BoxContainer() {
     if (username.length !== 0) {
       const requestURI = `${process.env.BACKEND_USER_URI}/getRequests`;
 
-      //get request to backend for previous search history
+      // get request to backend for previous search history
       const getRequests = async () => {
         const response = await axios.post(requestURI, {
           username,
         });
-        //if there are previous searches in the databases, set search in state to the
-        //array of previous searches that are returned from the backend
-        if (response.data.length > 0) setSearched(response.data);
+        // if there are previous searches in the databases, set search in state to the
+        // array of previous searches that are returned from the backend
+        if (response.data.length > 0) setSearched(response.data.reverse());
       };
       getRequests();
     }
@@ -84,18 +87,22 @@ function BoxContainer() {
       setInputLabel('Paste your code');
       setOutputLabel('Plain English');
       setExpButtonText('COPY EXPLANATION');
+      setInputBoxPlaceholder('Code');
       schemaBox = [];
     }
     if (queryMode === 'en-to-code') {
       setInputLabel('Type your plain english to be translated');
       setOutputLabel('Generated Code');
       setExpButtonText('COPY CODE');
+      setInputBoxPlaceholder('Plain English Explanation');
+
       schemaBox = [];
     }
     if (queryMode === 'en-to-sql') {
       setInputLabel('Type what you want your query to search for');
       setOutputLabel('Generated SQL Query');
       setExpButtonText('COPY SQL QUERY');
+      setInputBoxPlaceholder('Plain English Explanation');
     }
   }, [queryMode]);
 
@@ -106,20 +113,25 @@ function BoxContainer() {
     // use setShrinkComponent anywhere you are programatically copying and pasting into the user input field
     setShrinkComponent({ shrink: 'true' });
 
-    //set value (i.e. html text) of the inputBox to equal the query field of the history element
+    // set value (i.e. html text) of the inputBox to equal the query field of the history element
     document.querySelector('#filled-multiline-static').value = historyel.query;
 
-    //set input text + output text + schema in state to be equal to the history element
+    // set input text + output text + schema in state to be equal to the history element
     setOutputText(historyel.translation);
     setUserSchema(historyel.schema);
-    return;
+    const copySchema = { ...userSchema };
+    let string = '';
+    for (const [key, value] of Object.entries(copySchema)) {
+      string += key;
+      string += `(${value})` + '/n';
+    }
+    setStringSchema(string);
   }
 
   // adds whatever is in user input text field into state
   // attached to event listener in component
   const handleTyping = (event) => {
     setInputText(event.target.value);
-    return;
   };
 
   // copies the output box to user's clipboard
@@ -141,7 +153,6 @@ function BoxContainer() {
     }
     // utilizes clipboard API to copy text to user's clipboard
     navigator.clipboard.writeText(copyOutput);
-    return;
   };
 
   // adds sudocode styling so user's can easily copy directly into code
@@ -163,7 +174,6 @@ function BoxContainer() {
     }
     const textToCopy = `/*\n ${copyOutput} \n */`;
     navigator.clipboard.writeText(textToCopy);
-    return;
   };
 
   // sends contents of user input text field to backend
@@ -171,12 +181,15 @@ function BoxContainer() {
     // console.log(JSON.stringify(inputText));
     event.preventDefault();
     let requestURI;
-    if (queryMode === 'code-to-en')
+    if (queryMode === 'code-to-en') {
       requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
-    if (queryMode === 'en-to-code')
+    }
+    if (queryMode === 'en-to-code') {
       requestURI = `${process.env.BACKEND_API_URI}/entocode`;
-    if (queryMode === 'en-to-sql')
+    }
+    if (queryMode === 'en-to-sql') {
       requestURI = `${process.env.BACKEND_API_URI}/entosql`;
+    }
 
     // request body to be sent to backend
     const json = {
@@ -216,19 +229,6 @@ function BoxContainer() {
   // function for handling changing the mode of the query -> setting mode
   const handleQueryModeClick = (queryModeString) => {
     setQueryMode(queryModeString);
-  };
-
-  // handles updating of user schema on submission of schema box
-  const handleSchemaSubmit = (e) => {
-    e.preventDefault();
-
-    const data = new FormData(e.currentTarget);
-    const tableName = data.get('table-name');
-    const columnNames = data.get('column-names');
-    const schemaObj = {};
-    schemaObj[tableName] = columnNames;
-
-    setUserSchema(schemaObj);
   };
 
   // renders schema information when current mode is en-to-sql and schema is present in state
@@ -275,8 +275,13 @@ function BoxContainer() {
         </ButtonGroup>
       </div>
       <main id='BoxContainer' style={{ display: 'flex' }}>
-        <SchemaBox userSchema={userSchema} queryMode={queryMode} />
+        <SchemaBox
+          userSchema={userSchema}
+          queryMode={queryMode}
+          stringSchema={stringSchema}
+        />
         <UserInput
+          inputBoxPlaceholder={inputBoxPlaceholder}
           inputLabel={inputLabel}
           shrinkComponent={shrinkComponent}
           inputText={inputText}
@@ -284,7 +289,9 @@ function BoxContainer() {
           handleSubmit={handleSubmit}
           queryMode={queryMode}
           inputTextLength={inputTextLength}
-          handleSchemaSubmit={handleSchemaSubmit}
+          setUserSchema={setUserSchema}
+          stringSchema={stringSchema}
+          setStringSchema={setStringSchema}
         />
         <div id='imgWrapper'>
           <img id='snake' src={Snake} />
