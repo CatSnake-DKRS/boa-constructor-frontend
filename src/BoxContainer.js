@@ -4,12 +4,9 @@ import { Button, ButtonGroup, TextField } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
-import Shark from './static/shark.png';
+import Snake from './static/snake.png';
 import SignInButtons from './SignInButtons';
 import SchemaBox from './schemaBox';
-
-// mock data for searched:
-// to test first update username in the state to any mock string as well
 
 function BoxContainer() {
   // updates current text in user input box
@@ -23,7 +20,6 @@ function BoxContainer() {
 
   // keeps track of the current username in the session
   const [username, setUsername] = useState('');
-
   // sets history menu to open or close
   const [open, setHistoryOpen] = useState(false);
 
@@ -31,13 +27,7 @@ function BoxContainer() {
   const [shrinkComponent, setShrinkComponent] = useState({});
 
   // keeps track of search history
-  const [searched, setSearched] = useState([
-    {
-      query: 'See query history here',
-      translation: 'See translation history here',
-    },
-  ]);
-
+  const [searched, setSearched] = useState([]);
   // text displayed in input box
   const [inputLabel, setInputLabel] = useState('Paste your code');
 
@@ -81,7 +71,7 @@ function BoxContainer() {
         });
         //if there are previous searches in the databases, set search in state to the
         //array of previous searches that are returned from the backend
-        if (response.data.length > 0) setSearched(response.data.reverse());
+        if (response.data.length > 0) setSearched(response.data);
       };
       getRequests();
     }
@@ -182,9 +172,9 @@ function BoxContainer() {
     event.preventDefault();
     let requestURI;
     if (queryMode === 'code-to-en')
-      requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
-    if (queryMode === 'en-to-code')
       requestURI = `${process.env.BACKEND_API_URI}/entocode`;
+    if (queryMode === 'en-to-code')
+      requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
     if (queryMode === 'en-to-sql')
       requestURI = `${process.env.BACKEND_API_URI}/entosql`;
 
@@ -210,12 +200,12 @@ function BoxContainer() {
           'Access-Control-Allow-Origin': '*',
         },
       });
-      setOutputText(response.data.translation);
-      return;
     } catch (error) {
       console.log(error);
     }
     // sets output text element in state to equal what is returned from backend
+    setOutputText(response.data.translation);
+    return;
   };
 
   // handles opening of dropdown menu
@@ -223,10 +213,9 @@ function BoxContainer() {
     setHistoryOpen(!open);
   };
 
-  // handling changing the mode of the query -> setting mode
-  const handleInputBoxButtons = (queryModeString) => {
+  // function for handling changing the mode of the query -> setting mode
+  const handleQueryModeClick = (queryModeString) => {
     setQueryMode(queryModeString);
-    return;
   };
 
   // handles updating of user schema on submission of schema box
@@ -257,7 +246,7 @@ function BoxContainer() {
             {open ? (
               <SearchedResults
                 handleElementClick={handleElementClick}
-                searched={searched.slice(0, 5)}
+                searched={searched}
               />
             ) : null}
           </div>
@@ -266,19 +255,19 @@ function BoxContainer() {
       <div id='button-group-container'>
         <ButtonGroup variant='outlined' aria-label='outlined button group'>
           <Button
-            onClick={() => handleInputBoxButtons('code-to-en')}
+            onClick={() => handleQueryModeClick('code-to-en')}
             variant={queryMode === 'code-to-en' ? 'contained' : 'outlined'}
           >
             Code to English
           </Button>
           <Button
-            onClick={() => handleInputBoxButtons('en-to-code')}
+            onClick={() => handleQueryModeClick('en-to-code')}
             variant={queryMode === 'en-to-code' ? 'contained' : 'outlined'}
           >
             English to Code
           </Button>
           <Button
-            onClick={() => handleInputBoxButtons('en-to-sql')}
+            onClick={() => handleQueryModeClick('en-to-sql')}
             variant={queryMode === 'en-to-sql' ? 'contained' : 'outlined'}
           >
             English to SQL
@@ -298,7 +287,7 @@ function BoxContainer() {
           handleSchemaSubmit={handleSchemaSubmit}
         />
         <div id='imgWrapper'>
-          <img id='shark' src={Shark} />
+          <img id='snake' src={Snake} />
         </div>
         <OutputBox
           outputLabel={outputLabel}

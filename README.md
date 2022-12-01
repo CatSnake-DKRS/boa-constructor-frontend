@@ -1,1 +1,1 @@
-# sudo-shark-frontend
+# boa-constructor-frontend
