@@ -1,5 +1,5 @@
 {
-  "name": "sudo-shark-frontend",
+  "name": "boa-constructor-frontend",
   "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development webpack-dev-server --open",
     "test": "jest --verbose"
   },
-  "author": "SharkTalk",
+  "author": "BOA",
   "license": "MIT",
   "jest": {
     "testEnvironment": "jest-environment-jsdom",

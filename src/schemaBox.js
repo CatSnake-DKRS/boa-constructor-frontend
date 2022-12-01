@@ -15,9 +15,7 @@ function SchemaBox(props) {
       />
     );
   }
-  return (
-    <div />
-  );
+  return <div />;
 }
 
 export default SchemaBox;

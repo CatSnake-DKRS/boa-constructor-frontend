@@ -2,9 +2,7 @@ import React from 'react';
 import BoxContainer from './BoxContainer';
 
 function App() {
-  return (
-    <BoxContainer />
-  );
+  return <BoxContainer />;
 }
 
 export default App;
