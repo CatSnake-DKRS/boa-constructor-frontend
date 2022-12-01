@@ -43,7 +43,7 @@ describe('clicking mode buttons generates different page elements', () => {
     text = render(<BoxContainer />);
   });
 
-  test('clicking "English to Code" button changes page elements', () => {
+  test('clicking "English to Code" button changes relevant page elements', () => {
     // console.log('button: ', getByText('English to Code'))
     fireEvent(
       screen.getByText('English to Code'),
@@ -54,10 +54,43 @@ describe('clicking mode buttons generates different page elements', () => {
     )
     expect(screen.getByText('Type your plain english to be translated')).toBeTruthy();
   })
+
+  test('clicking "English to SQL" button changes relevant page elements', () => {
+    fireEvent(
+      screen.getByText('English to SQL'),
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    expect(screen.getByText('Type what you want your query to search for')).toBeTruthy();
+  })
 })
 
-// different endpoint in each mode
 // after submission a response is generated in the output
+// describe('submitting an input generates a response in output', () => {
+
+//   let text;
+//   beforeEach(() => {
+//     text = render(<BoxContainer />);
+//   });
+
+//   test('user is able to properly interact with the input field', () => {
+//     // console.log('button: ', getByText('English to Code'))
+//     fireEvent(
+//       screen.getByText('English to Code'),
+//       new MouseEvent('click', {
+//         bubbles: true,
+//         cancelable: true,
+//       }),
+//     )
+//     fireEvent.change(screen.getByText('English to Code'), {target: {Value: 'hello world'}});
+
+//     expect(screen.getByText('hello world')).toBeTruthy();
+//   })
+// })
+
+// different endpoint in each mode
 // when open history is clicked a dropdown menu appears
 // user cannot type in output field
 // log in button allows user to type in username and password
