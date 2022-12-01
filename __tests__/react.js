@@ -1,18 +1,21 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render, screen, waitFor, fireEvent,
+} from '@testing-library/react';
 import regeneratorRuntime from 'regenerator-runtime';
 
 import { Experimental_CssVarsProvider } from '@mui/material';
 import App from '../src/App';
 
 describe('renders correct text on main page', () => {
+  let text;
   beforeAll(() => {
-    render(<App />);
+    text = render(<App />);
   });
 
   test('Renders boa constructor text', () => {
-    expect(true.toEqual(true));
+    expect(text.toHaveTextContent('Boa Constructor'));
   });
 });
 // mode buttons render different things and translate button sends to
