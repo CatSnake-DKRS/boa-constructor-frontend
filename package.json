@@ -1,5 +1,5 @@
 {
-  "name": "sudo-shark-frontend",
+  "name": "boa-constructor-frontend",
   "version": "0.0.1",
   "description": "",
   "main": "src/index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development webpack-dev-server --open"
   },
-  "author": "SharkTalk",
+  "author": "BOA",
   "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -18,11 +18,13 @@
     "axios": "^1.2.0",
     "css-loader": "^6.7.2",
     "fs": "^0.0.1-security",
+    "gapi-script": "^1.2.0",
     "keyword-extractor": "^0.0.23",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-login": "^5.2.2",
     "retext": "^8.1.0",
     "retext-keywords": "^7.2.0",
     "retext-pos": "^4.1.0",

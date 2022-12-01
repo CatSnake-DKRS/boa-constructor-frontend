@@ -8,13 +8,13 @@ import {
   Box,
 } from '@mui/material';
 import axios from 'axios';
+import GoogleLoginButton from './GoogleLoginButton';
 
 function SignInButtons(props) {
   const { setUsername, stateUsername } = props;
 
   const [openLogin, setOpenLogin] = React.useState(false);
   const [openSignUp, setOpenSignUp] = React.useState(false);
-  const [isLoggedIn, setLoginStatus] = React.useState(false);
 
   // opens and closes dialogue boxes for sign in and sign up functionality
   const handleClickLoginOpen = () => {
@@ -124,6 +124,7 @@ function SignInButtons(props) {
       </Button>
       <Dialog open={openLogin} onClose={handleLoginClose}>
         <DialogTitle>Login</DialogTitle>
+        <GoogleLoginButton />
         <DialogContent>
           <Box
             component='form'

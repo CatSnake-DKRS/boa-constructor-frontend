@@ -4,7 +4,7 @@ import { Button, ButtonGroup, TextField } from '@mui/material';
 import UserInput from './UserInput';
 import OutputBox from './OutputBox';
 import SearchedResults from './SearchedResults';
-import Shark from './static/shark.png';
+import Snake from './static/snake.png';
 import SignInButtons from './SignInButtons';
 import SchemaBox from './schemaBox';
 
@@ -44,13 +44,13 @@ function BoxContainer() {
   // displays text returned from server
   const [outputText, setOutputText] = useState('');
   // keeps track of the current username in the session
-  const [username, setUsername] = useState('Robbie');
+  const [username, setUsername] = useState('');
   // sets history menu to open or close
   const [open, setHistoryOpen] = useState(false);
   // fixes mui text field bug when label doesn't shrink after text is copied into input
   const [shrinkComponent, setShrinkComponent] = useState({});
   // keeps track of search history
-  const [searched, setSearched] = useState(mockDataForSearch);
+  const [searched, setSearched] = useState([]);
   // text displayed in input box
   const [inputLabel, setInputLabel] = useState('Paste your code');
   // keeps track of currently selected query method
@@ -151,9 +151,12 @@ function BoxContainer() {
     // console.log(JSON.stringify(inputText));
     event.preventDefault();
     let requestURI;
-    if (queryMode === 'code-to-en') requestURI = `${process.env.BACKEND_API_URI}/entocode`;
-    if (queryMode === 'en-to-code') requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
-    if (queryMode === 'en-to-sql') requestURI = `${process.env.BACKEND_API_URI}/entosql`;
+    if (queryMode === 'code-to-en')
+      requestURI = `${process.env.BACKEND_API_URI}/entocode`;
+    if (queryMode === 'en-to-code')
+      requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
+    if (queryMode === 'en-to-sql')
+      requestURI = `${process.env.BACKEND_API_URI}/entosql`;
 
     // request body to be sent to backend
     const json = {
@@ -255,19 +258,19 @@ function BoxContainer() {
         <ButtonGroup variant='outlined' aria-label='outlined button group'>
           <Button
             onClick={handleCodeToEnClick}
-            variant={(queryMode === 'code-to-en') ? 'contained' : 'outlined'}
+            variant={queryMode === 'code-to-en' ? 'contained' : 'outlined'}
           >
             Code to English
           </Button>
           <Button
             onClick={handleEnToCodeClick}
-            variant={(queryMode === 'en-to-code') ? 'contained' : 'outlined'}
+            variant={queryMode === 'en-to-code' ? 'contained' : 'outlined'}
           >
             English to Code
           </Button>
           <Button
             onClick={handleEnToSQLClick}
-            variant={(queryMode === 'en-to-sql') ? 'contained' : 'outlined'}
+            variant={queryMode === 'en-to-sql' ? 'contained' : 'outlined'}
           >
             English to SQL
           </Button>
@@ -286,7 +289,7 @@ function BoxContainer() {
           handleSchemaSubmit={handleSchemaSubmit}
         />
         <div id='imgWrapper'>
-          <img id='shark' src={Shark} />
+          <img id='snake' src={Snake} />
         </div>
         <OutputBox
           outputLabel={outputLabel}
