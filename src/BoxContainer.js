@@ -210,12 +210,12 @@ function BoxContainer() {
           'Access-Control-Allow-Origin': '*',
         },
       });
+      setOutputText(response.data.translation);
+      return;
     } catch (error) {
       console.log(error);
     }
     // sets output text element in state to equal what is returned from backend
-    setOutputText(response.data.translation);
-    return;
   };
 
   // handles opening of dropdown menu
