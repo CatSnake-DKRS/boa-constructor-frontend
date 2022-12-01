@@ -172,9 +172,9 @@ function BoxContainer() {
     event.preventDefault();
     let requestURI;
     if (queryMode === 'code-to-en')
-      requestURI = `${process.env.BACKEND_API_URI}/entocode`;
-    if (queryMode === 'en-to-code')
       requestURI = `${process.env.BACKEND_API_URI}/codetoen`;
+    if (queryMode === 'en-to-code')
+      requestURI = `${process.env.BACKEND_API_URI}/entocode`;
     if (queryMode === 'en-to-sql')
       requestURI = `${process.env.BACKEND_API_URI}/entosql`;
 
