@@ -15,9 +15,12 @@ describe('renders correct text on main page', () => {
   });
 
   test('Renders boa constructor text', () => {
-    expect(text.toHaveTextContent('Boa Constructor'));
+    console.log('testText: ', typeof text.getByText('Boa Constructor'));
+    const testText = text.getByText('Boa Constructor');
+    expect(testText).toBeTruthy();
   });
 });
+
 // mode buttons render different things and translate button sends to
 // different endpoint in each mode
 // after submission a response is generated in the output
