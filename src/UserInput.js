@@ -3,7 +3,6 @@ import { Button, TextField } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import SchemaDialogue from './SchemaDialogue';
-import Shark from './static/shark.png';
 
 const inlineStyle = {
   display: 'flex',
