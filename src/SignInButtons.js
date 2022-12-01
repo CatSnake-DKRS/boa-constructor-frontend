@@ -11,11 +11,11 @@ import axios from 'axios';
 
 function SignInButtons(props) {
   const { setUsername, stateUsername } = props;
-  //state to help manage what buttons show based on login conditions
+  // state to help manage what buttons show based on login conditions
   const [openLogin, setOpenLogin] = React.useState(false);
   const [openSignUp, setOpenSignUp] = React.useState(false);
 
-  //state to help populate error fields when logins/signups are done incorrectly
+  // state to help populate error fields when logins/signups are done incorrectly
   const [errorSignUp, setErrorSignUp] = React.useState('');
   const [errorLogin, setErrorLogin] = React.useState('');
   const [errorPassword, setErrorPassword] = React.useState('');
@@ -61,7 +61,7 @@ function SignInButtons(props) {
         // change state of username with success
         setUsername(response.data);
 
-        //add username to session storage
+        // add username to session storage
         sessionStorage.setItem('username', username);
         // close dialog
         setOpenLogin(false);
@@ -115,12 +115,12 @@ function SignInButtons(props) {
   const handleLogout = (e) => {
     e.preventDefault();
     // change state of username to empty string
-    //clear any error messages that may be lingering
+    // clear any error messages that may be lingering
     setUsername('');
     setErrorSignUp('');
     setErrorLogin('');
     setErrorPassword('');
-    //clear username from sessionId
+    // clear username from sessionId
     sessionStorage.clear();
   };
 

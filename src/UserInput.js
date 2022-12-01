@@ -30,11 +30,40 @@ export default function (props) {
     inputLabel,
     shrinkComponent,
     queryMode,
-    handleSchemaSubmit,
+    setUserSchema,
+    stringSchema,
+    setStringSchema,
   } = props;
   // Variable to display remaining characters allowed in input field (max is set to 250)
   const characterCount = `${inputTextLength} / 250`;
   let schemaButton = [];
+  const handleSchemaSubmit = (e) => {
+    const handleSchemaString = (schemaString) => {
+      const schemaObj = {};
+      const tables = schemaString.split(/\r?\n/);
+      console.log('tables: ', tables);
+      tables.forEach((el) => {
+        const tableName = el.substring(0, el.indexOf('('));
+        const regExp = /\(([^)]+)\)/;
+        const columns = regExp.exec(el)[1];
+        console.log('columns: ', columns);
+        schemaObj[tableName] = columns;
+      });
+      return schemaObj;
+    };
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+    const schemaString = data.get('schema');
+    setStringSchema(schemaString);
+    // const columnNames = data.get('column-names');
+    const schemaObj = handleSchemaString(schemaString);
+    // schemaObj[tableName] = columnNames;
+
+    setUserSchema(schemaObj);
+
+    setOpenSchemabox(false);
+  };
   if (queryMode === 'en-to-sql') {
     schemaButton = (
       <>
@@ -51,7 +80,9 @@ export default function (props) {
         <SchemaDialogue
           openSchemaBox={openSchemaBox}
           handleSchemaBoxClose={handleSchemaBoxClose}
+          setUserSchema={setUserSchema}
           handleSchemaSubmit={handleSchemaSubmit}
+          stringSchema={stringSchema}
         />
       </>
     );
