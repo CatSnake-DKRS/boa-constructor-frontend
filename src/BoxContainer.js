@@ -81,7 +81,7 @@ function BoxContainer() {
         });
         //if there are previous searches in the databases, set search in state to the
         //array of previous searches that are returned from the backend
-        if (response.data.length > 0) setSearched(response.data);
+        if (response.data.length > 0) setSearched(response.data.reverse());
       };
       getRequests();
     }
@@ -223,15 +223,10 @@ function BoxContainer() {
     setHistoryOpen(!open);
   };
 
-  // Group of function for handling changing the mode of the query -> setting mode
-  const handleCodeToEnClick = () => {
-    setQueryMode('code-to-en');
-  };
-  const handleEnToCodeClick = () => {
-    setQueryMode('en-to-code');
-  };
-  const handleEnToSQLClick = () => {
-    setQueryMode('en-to-sql');
+  // handling changing the mode of the query -> setting mode
+  const handleInputBoxButtons = (queryModeString) => {
+    setQueryMode(queryModeString);
+    return;
   };
 
   // handles updating of user schema on submission of schema box
@@ -262,7 +257,7 @@ function BoxContainer() {
             {open ? (
               <SearchedResults
                 handleElementClick={handleElementClick}
-                searched={searched}
+                searched={searched.slice(0, 5)}
               />
             ) : null}
           </div>
@@ -271,19 +266,19 @@ function BoxContainer() {
       <div id='button-group-container'>
         <ButtonGroup variant='outlined' aria-label='outlined button group'>
           <Button
-            onClick={handleCodeToEnClick}
+            onClick={() => handleInputBoxButtons('code-to-en')}
             variant={queryMode === 'code-to-en' ? 'contained' : 'outlined'}
           >
             Code to English
           </Button>
           <Button
-            onClick={handleEnToCodeClick}
+            onClick={() => handleInputBoxButtons('en-to-code')}
             variant={queryMode === 'en-to-code' ? 'contained' : 'outlined'}
           >
             English to Code
           </Button>
           <Button
-            onClick={handleEnToSQLClick}
+            onClick={() => handleInputBoxButtons('en-to-sql')}
             variant={queryMode === 'en-to-sql' ? 'contained' : 'outlined'}
           >
             English to SQL
