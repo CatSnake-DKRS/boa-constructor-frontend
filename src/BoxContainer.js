@@ -8,9 +8,6 @@ import Snake from './static/snake.png';
 import SignInButtons from './SignInButtons';
 import SchemaBox from './schemaBox';
 
-// mock data for searched:
-// to test first update username in the state to any mock string as well
-
 function BoxContainer() {
   // updates current text in user input box
   const [inputText, setInputText] = useState('');
@@ -22,7 +19,7 @@ function BoxContainer() {
   const [outputText, setOutputText] = useState('');
 
   // keeps track of the current username in the session
-  const [username, setUsername] = useState('Robbie');
+  const [username, setUsername] = useState('');
   // sets history menu to open or close
   const [open, setHistoryOpen] = useState(false);
 
@@ -30,7 +27,7 @@ function BoxContainer() {
   const [shrinkComponent, setShrinkComponent] = useState({});
 
   // keeps track of search history
-  const [searched, setSearched] = useState(mockDataForSearch);
+  const [searched, setSearched] = useState([]);
   // text displayed in input box
   const [inputLabel, setInputLabel] = useState('Paste your code');
 
